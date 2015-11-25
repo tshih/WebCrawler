@@ -1,0 +1,15 @@
+.Python
+[Bb]in
+/webcrawler/Include
+/webcrawler/Lib
+/webcrawler/Scripts
+**/__pycache__
+[Ii]nclude
+[Ll]ib
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+**/pip-selfcheck.json
+
+*.sublime-project
+*.sublime-workspace
