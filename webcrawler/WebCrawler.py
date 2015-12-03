@@ -1,12 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-
 test = requests.get("https://accenture.com")
 soup = BeautifulSoup(test.text, "html.parser")
-
-
-print(soup.title)
 
 #Finds all images in img tag
 for link in soup.find_all("img"):
@@ -15,3 +11,5 @@ for link in soup.find_all("img"):
 ##Finds all links in "a" tag
 for link in soup.find_all("a"):
 	print(link.get("href"))
+
+
