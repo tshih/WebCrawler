@@ -13,3 +13,5 @@ pyvenv.cfg
 
 *.sublime-project
 *.sublime-workspace
+
+/webcrawler/CrawledImages
