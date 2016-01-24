@@ -1,33 +1,43 @@
 import requests
 import shutil
 import os
+import re
 from bs4 import BeautifulSoup
 
+def cleanFolderAbsolute(folderPath):
+	if os.path.exists(folderPath):
+		shutil.rmtree(folderPath)
+	os.makedirs(folderPath)
+
+
 currentPath = os.getcwd()
-imgPath = currentPath + "/CrawledImages"
+
+startingSiteURL = "http://finalfantasy.wikia.com/wiki/List_of_Final_Fantasy_VIII_Triple_Triad_cards"
+imgPath = currentPath + "/TripleTriadCards"
+
+cleanFolderAbsolute(imgPath)
+
+startingSite = requests.get(startingSiteURL)
+soup = BeautifulSoup(startingSite.text, "html.parser")
+
+for a in soup.find_all("a", class_="image image-thumbnail"):
+	cardImgURL = a.get("href")
+	if(cardImgURL):
+		# print(cardImgURL)
+		fileName = re.search("/[\w-]+\.png", cardImgURL).group(0)
+		savePath = imgPath + fileName
+		cardImg = requests.get(cardImgURL, stream=True)
+		cardImg.raw.decode_content = True
+		with open(savePath, "wb") as f:
+			shutil.copyfileobj(cardImg.raw, f)
 
 
-if os.path.exists(imgPath):
-	shutil.rmtree(imgPath)
-os.makedirs(imgPath)
-
-test = requests.get("https://accenture.com")
-soup = BeautifulSoup(test.text, "html.parser")
-
-savePath = imgPath + "/logo-accenture.png"
-
-testImg = requests.get("https://www.accenture.com/t20150523T054234__w__/us-en/_acnmedia/Accenture/Dev/ComponentImages/logo-accenture.png", stream=True)
-testImg.raw.decode_content = True
-with open(savePath, "wb") as f:
-	shutil.copyfileobj(testImg.raw, f)
-
-#Finds all images in img tag that are 
-for link in soup.find_all("img"):
-	if(link.get("src")): # Checks if src tag exists
-		print(os.path.basename(link.get("src"))) #Print only the base file name
 
 
 
+
+# tables = soup.find_all("table", class_="full-width FFVIII table")
+# print(tables)
 
 
 ###Finds all links in "a" tag
